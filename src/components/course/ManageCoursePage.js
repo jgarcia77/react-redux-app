@@ -2,8 +2,9 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import * as courseActions from '../../actions/courseActions';
 import CourseForm from './CourseForm';
+import { authorsFormattedForDropdown } from '../../selectors/selectors';
 
-class ManageCoursePage extends React.Component {
+export class ManageCoursePage extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
@@ -33,7 +34,7 @@ class ManageCoursePage extends React.Component {
 
   saveCourse(evt) {
     evt.preventDefault();
-    this.props.saveCourse(this.state.course);
+    this.saveCourse(this.state.course);
     this.context.router.push('/courses');
   }
 
@@ -74,15 +75,10 @@ function mapStateToProps(state, ownProps) {
     course = getCourseById(state.courses, courseId);
   }
 
-  const authorsFormattedForDropdown = state.authors.map(author => {
-    return {
-      value: author.id,
-      text: author.firstName + ' ' + author.lastName
-    };
-  });
+  
   return {
    course: course,
-   authors: authorsFormattedForDropdown
+   authors: authorsFormattedForDropdown(state.authors)
   };
 }
 
